@@ -4,7 +4,7 @@ import asyncHandler from 'express-async-handler';
 import routes from './routes/routes.js';
 import { publicURLPath, publicDirectory } from './paths.js';
 import compression from 'compression';
-const port = process.env.PORT || 5132;
+const port = process.env.PORT || 5134;
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -59,7 +59,8 @@ console.log(`Server running at http://localhost:${port}`);
 if (!isProduction) {
   const livereload = await import('livereload');
   const lrserver = livereload.createServer({
-    delay: 50
+    delay: 50,
+    port: 35731
   });
   lrserver.watch(publicDirectory);
 }

@@ -76,7 +76,7 @@ async function getPage(pageName, hostname) {
   const exports = await import(getRelativePathToSSRDist(filePaths.ssr.jsFile));
   const liveReloadScript = isProduction
     ? undefined
-    : `http://${hostname.split(':')[0]}:35729/livereload.js?snipver=1`;
+    : `http://${hostname.split(':')[0]}:35731/livereload.js?snipver=1`;
 
   return {
     js: jsFile ? `${publicURLPath}/${path.relative(publicDirectory, jsFile)}` : '',
