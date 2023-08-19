@@ -32,7 +32,6 @@
   },
   "devDependencies": {
     "concurrently": "^7.6.0",
-    "cpy": "^10.1.0",
     "del": "^7.0.0",
     "esbuild": "^0.19.2",
     "esbuild-plugin-manifest": "^0.6.0",

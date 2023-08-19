@@ -3,9 +3,8 @@ import fs from 'node:fs';
 import {
   root,
   publicDirectory,
-  publicURLPath,
-  nonIslandMinDirectory,
   publicDirectoryRelative,
+  publicURLPath,
   ssrDirectoryRelative
 } from './paths.js';
 
@@ -14,11 +13,11 @@ const isProduction = process.env.NODE_ENV === 'production';
 function getPaths(pageName) {
   return {
     source: {
-      jsFile: `client/pages/${pageName}/${pageName}.islands.jsx`
+      jsFile: `client/pages/${pageName}/${pageName}.islands.jsx`,
+      cssFile: `client/pages/${pageName}/${pageName}.page.css`
     },
     ssr: {
-      jsFile: `${ssrDirectoryRelative}/pages/${pageName}/${pageName}.page.js`,
-      cssFile: `${ssrDirectoryRelative}pages/${pageName}/${pageName}.page.css`
+      jsFile: `${ssrDirectoryRelative}/pages/${pageName}/${pageName}.page.js`
     }
   };
 }
@@ -28,20 +27,20 @@ function getRelativePathToSSRDist(distSSRPath) {
 }
 
 let publicManifestCache;
-let ssrMinManifestCache;
+let islandManifestCache;
 let metafileCache;
 async function getPage(pageName, hostname) {
   const filePaths = getPaths(pageName);
 
-  // Map from server manifest and metafile
-  // Cache manifest and metafile if not cached
+  // Map from manifest and metafile
+  // Cache manifests and metafile if not cached
   let publicManifest = publicManifestCache;
-  let ssrMinManifest = ssrMinManifestCache;
+  let islandManifest = islandManifestCache;
   let metafile = metafileCache;
   if (!publicManifest) {
     const [
       publicManifestString,
-      ssrMinManifestString,
+      islandManifestString,
       metafileString
     ] = await Promise.all([
       fs.promises.readFile(
@@ -49,7 +48,7 @@ async function getPage(pageName, hostname) {
         'utf-8'
       ),
       fs.promises.readFile(
-        path.resolve(nonIslandMinDirectory, 'manifest.json'),
+        path.resolve(publicDirectory, 'manifest-islands.json'),
         'utf-8'
       ),
       fs.promises.readFile(
@@ -58,18 +57,17 @@ async function getPage(pageName, hostname) {
       )
     ]);
     publicManifest = JSON.parse(publicManifestString);
-    ssrMinManifest = JSON.parse(ssrMinManifestString);
+    islandManifest = JSON.parse(islandManifestString);
     metafile = JSON.parse(metafileString);
     if (isProduction) {
       publicManifestCache = publicManifest;
-      ssrMinManifestCache = ssrMinManifest;
+      islandManifestCache = islandManifest;
       metafileCache = metafile;
     }
   }
 
-  const jsFile = publicManifest[filePaths.source.jsFile];
-  // CSS files contain full page CSS, with manifest in the nonIslandMinDirectory (but copied over to public directory)
-  const cssFile = ssrMinManifest[filePaths.ssr.cssFile];
+  const jsFile = islandManifest[filePaths.source.jsFile];
+  const cssFile = publicManifest[filePaths.source.cssFile];
   const preloadJs = (metafile.outputs[jsFile]?.imports || [])
     .filter(({ kind }) => kind === 'import-statement')
     .map(({ path: filePath }) => path.resolve(publicURLPath, path.relative(publicDirectoryRelative, filePath)));
@@ -79,9 +77,9 @@ async function getPage(pageName, hostname) {
     : `http://${hostname.split(':')[0]}:35731/livereload.js?snipver=1`;
 
   return {
-    js: jsFile ? `${publicURLPath}/${path.relative(publicDirectory, jsFile)}` : '',
+    js: jsFile ? `${publicURLPath}/${path.relative(publicDirectoryRelative, jsFile)}` : '',
     preloadJs,
-    css: `${publicURLPath}/${path.relative(nonIslandMinDirectory, cssFile)}`,
+    css: `${publicURLPath}/${path.relative(publicDirectoryRelative, cssFile)}`,
     exports,
     liveReloadScript
   };

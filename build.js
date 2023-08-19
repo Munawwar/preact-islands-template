@@ -1,12 +1,10 @@
 import { build } from 'esbuild';
 import { globby as glob } from 'globby';
 import { deleteAsync as rimraf } from 'del';
-import copy from 'cpy';
 import manifestPlugin from 'esbuild-plugin-manifest';
 import {
   publicDirectoryRelative,
   ssrDirectoryRelative,
-  nonIslandMinDirectoryRelative,
   publicURLPath,
   publicDirectory
 } from './server/paths.js';
@@ -20,10 +18,10 @@ const [ssrEntryPoints, clientEntryPoints] = await Promise.all([
   // clean current dist/
   rimraf('dist/')
 ]);
-// console.log('entryPoints', entryPoints);
 
 const commonConfig = {
   publicPath: publicURLPath,
+  outbase: clientOutBase,
   format: 'esm',
   bundle: true,
   sourcemap: true,
@@ -39,20 +37,26 @@ const commonConfig = {
   jsx: 'automatic'
 };
 
-const [result] = await Promise.all([
+// Why 3 builds?
+// 1. Client side JS - This is the JS for the islands only
+// 2. Rest of client side assets - CSS, images etc are of the entire page (the static part of page + islands).
+// 3. SSR build - Non-minified full page JS for server side for better stack traces
+// And also because preact-render-to-string includes node.js copy of preact. If you don't exclude preact from the build,
+// you would cause two preact copies (one in the bundled JS and one from preact-render-to-string)
+await Promise.all([
+  // Full page build
   build({
-    entryPoints: clientEntryPoints,
-    outbase: clientOutBase,
+    entryPoints: ssrEntryPoints,
     outdir: publicDirectoryRelative,
     splitting: true,
     minify: true,
     plugins: [manifestPlugin()],
-    metafile: true,
+    external: ['preact'],
     ...commonConfig
   }),
+  // SSR build
   build({
     entryPoints: ssrEntryPoints,
-    outbase: clientOutBase,
     outdir: ssrDirectoryRelative,
     splitting: false,
     minify: false,
@@ -61,33 +65,25 @@ const [result] = await Promise.all([
   })
 ]);
 
-const [cssEntryFiles] = await Promise.all([
-  glob(`${ssrDirectoryRelative}**/*.page.css`),
-  result && result.metafile
-    ? promises.writeFile(`${publicDirectory}/metafile.json`, JSON.stringify(result.metafile, 0, 2))
-    : null
+await Promise.all([
+  rimraf(`${publicDirectoryRelative}**/*.page.js(.map)?`),
+  rimraf(`${publicDirectoryRelative}**/chunk-*.js(.map)?`)
 ]);
 
-await build({
-  entryPoints: cssEntryFiles,
-  outbase: ssrDirectoryRelative,
-  outdir: nonIslandMinDirectoryRelative,
-  bundle: true,
-  splitting: false,
+// Island JS build
+const result = await build({
+  entryPoints: clientEntryPoints,
+  outdir: publicDirectoryRelative,
+  splitting: true,
   minify: true,
-  plugins: [manifestPlugin()],
+  plugins: [manifestPlugin({ filename: 'manifest-islands.json' })],
   metafile: true,
-  external: ['preact', 'preact-render-to-string'],
   ...commonConfig
 });
 
 await Promise.all([
-  copy([
-  `../../${ssrDirectoryRelative}**/*.*`,
-  `!../../${ssrDirectoryRelative}**/*.(js|css)(.map)?`,
-  `../../${nonIslandMinDirectoryRelative}**/*.css(.map)?`
-  ], '.', {
-    cwd: publicDirectory
-  }),
-  rimraf(`./${publicDirectoryRelative}**/*.islands-*.css(.map)?`)
+  result && result.metafile
+    ? promises.writeFile(`${publicDirectory}/metafile.json`, JSON.stringify(result.metafile, 0, 2))
+    : null,
+  rimraf(`${publicDirectoryRelative}**/*.islands-*.css(.map)?`)
 ]);
