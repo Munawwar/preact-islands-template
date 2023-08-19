@@ -1,6 +1,6 @@
 import { build } from 'esbuild';
-import glob from 'tiny-glob';
-import rimraf from 'rimraf';
+import { globby as glob } from 'globby';
+import { deleteAsync as rimraf } from 'del';
 import copy from 'cpy';
 import manifestPlugin from 'esbuild-plugin-manifest';
 import {
@@ -18,9 +18,7 @@ const [ssrEntryPoints, clientEntryPoints] = await Promise.all([
   glob(`${clientOutBase}/pages/**/*.page.jsx`),
   glob(`${clientOutBase}/pages/**/*.islands.jsx`),
   // clean current dist/
-  rimraf(publicDirectoryRelative),
-  rimraf(ssrDirectoryRelative),
-  rimraf(nonIslandMinDirectoryRelative)
+  rimraf('dist/')
 ]);
 // console.log('entryPoints', entryPoints);
 
@@ -91,6 +89,5 @@ await Promise.all([
   ], '.', {
     cwd: publicDirectory
   }),
-  rimraf(`./${publicDirectoryRelative}**/*.islands-*.css`, { glob: true }),
-  rimraf(`./${publicDirectoryRelative}**/*.islands-*.css.map`, { glob: true })
+  rimraf(`./${publicDirectoryRelative}**/*.islands-*.css(.map)?`)
 ]);
