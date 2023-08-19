@@ -1,7 +1,7 @@
 {
-  "name": "preact-mpa-template",
+  "name": "preact-islands-template",
   "version": "0.0.1",
-  "description": "Preact multi-page app/website starter template (SSR) - with express and esbuild",
+  "description": "Preact island architecture starter template (SSR) - with express and esbuild",
   "type": "module",
   "module": "server/server.js",
   "scripts": {

@@ -1,4 +1,4 @@
-# preact-mpa-template
+# preact-islands-template
 
 Example repo to start a multi-page app/website (MPA) with Preact, express and esbuild. If you don't need server side rendering (SSR) check [preact-spa-template](https://github.com/Munawwar/preact-spa-template).
 
