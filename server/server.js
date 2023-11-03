@@ -59,8 +59,9 @@ console.log(`Server running at http://localhost:${port}`);
 if (!isProduction) {
   const livereload = await import('livereload');
   const lrserver = livereload.createServer({
+    port: 35731,
     delay: 50,
-    port: 35731
+    usePolling: true // reload doesn't work reliable on linux/ubuntu (ext4 filesystem even) without this
   });
   lrserver.watch(publicDirectory);
 }
