@@ -1,4 +1,4 @@
 .DS_Store
 __ignore__
 node_modules/
-dist/
+certs/

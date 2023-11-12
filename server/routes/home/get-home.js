@@ -2,16 +2,17 @@ import { renderToString } from "preact-render-to-string";
 import getPage from "../../getPage.js";
 
 /**
- * @param {import('express').Request} req
- * @param {import('express').Response} res
+ * @param {import('fastify').FastifyRequest} req
+ * @param {import('fastify').FastifyReply} reply
  */
-export default async (req, res) => {
+export default async (req, reply) => {
   const {
     js,
     preloadJs,
     css,
     exports: { pageToHtml },
-    liveReloadScript
+    liveReloadScript,
+    importMaps
   } = await getPage('home', req.hostname);
 
   const pageContext = { counter: 10, urlPathname: req.path };
@@ -20,6 +21,7 @@ export default async (req, res) => {
     <!DOCTYPE html>
     <html>
       <head>
+        ${importMaps}
         <link rel="stylesheet" href="${css}">
         ${preloadJs.map((js) => /* html */`<link rel="modulepreload" href="${js}">`).join('\n')}
         <script>window.pageContext=${JSON.stringify(pageContext)};</script>
@@ -32,5 +34,6 @@ export default async (req, res) => {
     </html>
   `;
 
-  res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+  reply.headers({ 'Content-Type': 'text/html' });
+  reply.send(html);
 };

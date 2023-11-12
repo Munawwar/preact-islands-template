@@ -1,45 +1,44 @@
-import logo from './preact-logo.svg';
-import { PageContextProvider } from '../usePageContext';
-import { Link } from './Link';
-import './HomeLayout.css';
+import { html } from 'htm/preact';
+import { PageContextProvider } from '../usePageContext.js';
+import { Link } from './Link.js';
 
 const HomeLayout = function ({ children, pageContext }) {
-  return (
-    <PageContextProvider pageContext={pageContext}>
-      <Layout>
-        <Sidebar>
-          <Logo />
-          <Link className="navitem" href="/">
+  return (html`
+    <${PageContextProvider} pageContext=${pageContext}>
+      <${Layout}>
+        <${Sidebar}>
+          <${Logo} />
+          <${Link} class="HomeLayout-navitem" href="/">
             Home
-          </Link>
-          <Link className="navitem" href="/about">
+          </${Link}>
+          <${Link} class="HomeLayout-navitem" href="/about">
             About
-          </Link>
-        </Sidebar>
-        <Content>{children}</Content>
-      </Layout>
-    </PageContextProvider>
-  );
+          </${Link}>
+        </${Sidebar}>
+        <${Content}>${children}</${Content}>
+      </${Layout}>
+    </${PageContextProvider}>
+  `);
 };
 
 const Layout = function ({ children }) {
-  return (
+  return (html`
     <div
-      style={{
+      style=${{
         display: 'flex',
         maxWidth: 900,
         margin: 'auto'
       }}
     >
-      {children}
+      ${children}
     </div>
-  );
+  `);
 };
 
 const Sidebar = function ({ children }) {
-  return (
+  return (html`
     <div
-      style={{
+      style=${{
         padding: 20,
         flexShrink: 0,
         display: 'flex',
@@ -48,40 +47,40 @@ const Sidebar = function ({ children }) {
         lineHeight: '1.8em'
       }}
     >
-      {children}
+      ${children}
     </div>
-  );
+  `);
 };
 
 const Content = function ({ children }) {
-  return (
+  return (html`
     <div
       id="page-content"
-      style={{
+      style=${{
         padding: 20,
         paddingBottom: 50,
         borderLeft: '2px solid #eee',
         minHeight: '100vh'
       }}
     >
-      {children}
+      ${children}
     </div>
-  );
+  `);
 };
 
 function Logo() {
-  return (
+  return (html`
     <div
-      style={{
+      style=${{
         marginTop: 20,
         marginBottom: 10
       }}
     >
       <a href="/">
-        <img src={logo} height={64} width={64} alt="logo" />
+        <img src="/public/layouts/preact-logo.svg" height=${64} width=${64} alt="logo" />
       </a>
     </div>
-  );
+  `);
 }
 
 export { HomeLayout };

@@ -3,10 +3,8 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, `../`);
-const publicDirectoryRelative = 'dist/public/';
+const publicDirectoryRelative = 'public/';
 const publicDirectory = `${root}/${publicDirectoryRelative}`;
-const ssrDirectoryRelative = 'dist/ssr/';
-const ssrDirectory = `${root}/${ssrDirectoryRelative}`;
 const publicURLPath = '/public';
 
 export {
@@ -14,7 +12,5 @@ export {
   root,
   publicURLPath,
   publicDirectory,
-  publicDirectoryRelative,
-  ssrDirectory,
-  ssrDirectoryRelative
+  publicDirectoryRelative
 };

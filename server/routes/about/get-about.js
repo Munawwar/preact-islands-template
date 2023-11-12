@@ -2,10 +2,10 @@ import { renderToString } from "preact-render-to-string";
 import getPage from "../../getPage.js";
 
 /**
- * @param {import('express').Request} req
- * @param {import('express').Response} res
+ * @param {import('fastify').FastifyRequest} req
+ * @param {import('fastify').FastifyReply} reply
  */
-export default async (req, res) => {
+export default async (req, reply) => {
   const {
     js,
     preloadJs,
@@ -32,5 +32,6 @@ export default async (req, res) => {
     </html>
   `;
 
-  res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+  reply.headers({ 'Content-Type': 'text/html' });
+  reply.send(html);
 };
