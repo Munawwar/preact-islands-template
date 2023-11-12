@@ -6,14 +6,14 @@ If you want a less complex template (without island architecture) check [preact-
 
 If you don't need server side rendering (SSR) check [preact-spa-template](https://github.com/Munawwar/preact-spa-template).
 
-- <span aria-hidden>🐢</span> JS, CSS, image files are content hashed ("fingerprinted") on prod for long lived caching
-- <span aria-hidden>🤵‍♂️</span> Express JS server
-- <span aria-hidden>🔄</span> Live reload
-- <span aria-hidden>✂️</span> Shared code chunks / Code splitting (read esbuild docs for caveats)
-- <span aria-hidden>🚀</span> Preload shared chunks
+- <span aria-hidden>🐢</span> No build
+- <span aria-hidden>🤵‍♂️</span> Fastify server (HTTP2)
+- <span aria-hidden>🔄</span> Live reload on dev
 - <span aria-hidden>🌐</span> Static files deployable to CDN
 
-First create localhost certificate and key
+NOTE: This template only works with node.js 20 due to its reliance on node.js experimental loader `hot-esm` for busting dynamic `import()` cache.
+
+HTTP/2 works only with certificate. So first create localhost certificate and key:
 ```sh
 mkdir certs
 cd certs
@@ -48,6 +48,16 @@ Islands javascript will be loaded on the client side. Other than islands javascr
 You will have to do at least a couple of things to production-ize this template:
 1. You may not want to have a single preact context for the entire website. Each page having a separate context might be better.
 2. Optionally upload files from `/public` directory to a file storage origin (like AWS S3) and use a CDN to intercept everything under URL path `/public/*` (on the same domain as the express server) to point to the file storage origin. Remove express.js compression and enable dynamic compression on the CDN.
+
+## "No build" pros and cons
+
+Pros
+- Don't have to mess with a build tool
+
+Cons
+- Browser needs to support [import maps](https://caniuse.com/import-maps).
+- Long lived caching cannot be done (with absolute zero build step). Browsers will revalidate ETags and your server will send 304. This means more hits to the server / CDN.
+- On development, usually any file import()ed for SSR purpose is cached till the server is restarted. And restarting the server breaks browser-side livereload. To overcome this I am relying on an experimental [loader](https://nodejs.org/api/esm.html#esm_experimental_loaders) named `hot-esm`. This could break in a future version.
 
 ## Credits
 
