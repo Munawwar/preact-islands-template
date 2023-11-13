@@ -1,19 +1,17 @@
 # preact-islands-template
 
-Example repo to start a [island architecture](https://jasonformat.com/islands-architecture/) website with Preact, express and esbuild.
+Example repo to start a [island architecture](https://jasonformat.com/islands-architecture/) website with Preact and Fastify.
 
-If you want a less complex template (without island architecture) check [preact-mpa-template](https://github.com/Munawwar/preact-mpa-template).
-
-If you don't need server side rendering (SSR) check [preact-spa-template](https://github.com/Munawwar/preact-spa-template).
-
-- <span aria-hidden>🐢</span> No build
+- <span aria-hidden>🐇</span> No build
 - <span aria-hidden>🤵‍♂️</span> Fastify server (HTTP2)
 - <span aria-hidden>🔄</span> Live reload on dev
-- <span aria-hidden>🌐</span> Static files deployable to CDN
+- <span aria-hidden>🌐</span> Static files deployable to a CDN
 
-NOTE: This template only works with node.js 20 due to its reliance on node.js experimental loader `hot-esm` for busting dynamic `import()` cache.
+NOTE: This template only works with latest node.js 18 (tested on v18.18+, didn't work on v18.17), node.js 20 (v20.6+) due to its reliance on experimental loader for busting dynamic `import()` cache.
 
-HTTP/2 works only with certificate. So first create localhost certificate and key:
+## Dev setup
+
+For HTTP/2 to work, a self-signed certificate and key need to be created:
 ```sh
 mkdir certs
 cd certs
@@ -52,12 +50,13 @@ You will have to do at least a couple of things to production-ize this template:
 ## "No build" pros and cons
 
 Pros
-- Don't have to mess with a build tool
+- Don't have to mess with a build tool. Simpler local development setup and CI steps.
 
 Cons
 - Browser needs to support [import maps](https://caniuse.com/import-maps).
-- Long lived caching cannot be done (with absolute zero build step). Browsers will revalidate ETags and your server will send 304. This means more hits to the server / CDN.
-- On development, usually any file import()ed for SSR purpose is cached till the server is restarted. And restarting the server breaks browser-side livereload. To overcome this I am relying on an experimental [loader](https://nodejs.org/api/esm.html#esm_experimental_loaders) named `hot-esm`. This could break in a future version.
+- Long lived caching cannot be done (with absolute zero build step). Browsers will revalidate ETags and your server will send HTTP status 304 Not Modified. This means more hits to the server / CDN.
+- More chances of waterfall requests when importing JS. Especially if you have lots of nested imports. HTTP/2 can only mitigate the effects of it a bit. But again this is an "islands" template. I expect less JS. If your "island" is as big as Australia then isn't it a continent?
+- Reliance on experimental [loader](https://nodejs.org/api/esm.html#esm_experimental_loaders): On development, usually any file import()ed for SSR purpose is cached till the server is restarted. And restarting the server breaks browser-side livereload. To overcome this I am relying on a loader named [`hot-esm`](https://www.npmjs.com/package/hot-esm). This could break in a future version.
 
 ## Credits
 

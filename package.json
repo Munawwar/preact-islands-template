@@ -1,7 +1,7 @@
 {
   "name": "preact-islands-template",
   "version": "0.0.1",
-  "description": "Preact island architecture starter template (SSR) - with express and esbuild",
+  "description": "Preact island architecture starter template (SSR) - with Fastify HTTP/2 server",
   "type": "module",
   "module": "server/server.js",
   "scripts": {
@@ -14,7 +14,7 @@
     "preact",
     "MPA",
     "SSR",
-    "esbuild"
+    "fastify"
   ],
   "author": "Munawwar",
   "license": "MIT",
