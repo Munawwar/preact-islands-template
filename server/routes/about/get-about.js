@@ -20,6 +20,7 @@ export default async (req, reply) => {
     <!DOCTYPE html>
     <html>
       <head>
+        <link rel="stylesheet" href="/public/layouts/HomeLayout.css">
         <link rel="stylesheet" href="${css}">
         ${preloadJs.map((js) => /* html */`<link rel="modulepreload" href="${js}">`).join('\n')}
         <script>window.pageContext=${JSON.stringify(pageContext)};</script>

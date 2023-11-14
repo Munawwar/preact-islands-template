@@ -17,7 +17,6 @@ const app = Fastify({
   logger: true
 });
 
-// app.use(compression());
 app.register(compressMiddleware);
 app.register(staticMiddleware, {
   root: publicDirectory,
