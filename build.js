@@ -9,6 +9,20 @@ import {
   publicDirectory
 } from './server/paths.js';
 import { promises as fs } from 'node:fs';
+import { parseArgs } from 'node:util';
+
+const {
+  values: {
+    dev: isDevMode
+  }
+} = parseArgs({
+  options: {
+    dev: {
+      type: 'boolean',
+      default: false
+    }
+  }
+});
 
 const clientOutBase = 'client/';
 
@@ -24,7 +38,7 @@ const commonConfig = {
   outbase: clientOutBase,
   format: 'esm',
   bundle: true,
-  sourcemap: true,
+  sourcesContent: isDevMode,
   entryNames: '[dir]/[name]-[hash]',
   metafile: true,
   loader: {
@@ -53,6 +67,7 @@ const [tempBuildResult, ssrBuildResult] = await Promise.all([
     outdir: publicDirectoryRelative,
     splitting: true,
     minify: true,
+    sourcemap: true,
     external: ['preact'],
     ...commonConfig
   }),
@@ -62,8 +77,9 @@ const [tempBuildResult, ssrBuildResult] = await Promise.all([
     outdir: ssrDirectoryRelative,
     splitting: false,
     minify: false,
+    sourcemap: 'inline',
     external: ['preact', 'preact-render-to-string'],
-    ...commonConfig
+    ...commonConfig,
   })
 ]);
 
@@ -80,6 +96,7 @@ const islandBuildResult = await build({
   outdir: publicDirectoryRelative,
   splitting: true,
   minify: true,
+  sourcemap: true,
   metafile: true,
   ...commonConfig
 });
