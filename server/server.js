@@ -3,7 +3,7 @@ import Fastify from 'fastify';
 import staticMiddleware from '@fastify/static';
 import compressMiddleware from '@fastify/compress';
 import routes from './routes/routes.js';
-import { publicURLPath, publicDirectory } from './paths.js';
+import { publicURLPath, publicDirectory, root } from './paths.js';
 const port = process.env.PORT || 5134;
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -71,7 +71,7 @@ try {
       delay: 50,
       usePolling: true // reload doesn't work reliable on linux/ubuntu (ext4 filesystem even) without this
     });
-    lrserver.watch(publicDirectory);
+    lrserver.watch([publicDirectory, `${root}/server`]);
   }
 } catch (err) {
   app.log.error(err);
