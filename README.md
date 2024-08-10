@@ -55,8 +55,7 @@ Pros
 Cons
 - Browser needs to support [import maps](https://caniuse.com/import-maps).
 - Long lived caching cannot be done (with absolute zero build step). Browsers will revalidate ETags and your server will send HTTP status 304 Not Modified. This means more hits to the server / CDN.
-- More chances of waterfall requests when importing JS. Especially if you have lots of nested imports. HTTP/2 can only mitigate the effects of it a bit. But again this is an "islands" template. I expect less JS. If your "island" is as big as Australia then isn't it a continent?
-- Reliance on experimental [loader](https://nodejs.org/api/esm.html#esm_experimental_loaders): On development, usually any file import()ed for SSR purpose is cached till the server is restarted. And restarting the server breaks browser-side livereload. To overcome this I am relying on a loader named [`hot-esm`](https://www.npmjs.com/package/hot-esm). This could break in a future version.
+- More chances of waterfall requests when importing JS. Especially if you have lots of nested imports. HTTP/2 can only mitigate the effects of it a bit. But again this is an "islands" template. I expect less JS. If your "island" is as big as Australia then isn't that a continent?
 
 ## Credits
 
