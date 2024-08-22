@@ -6,7 +6,7 @@
   "module": "server/server.js",
   "scripts": {
     "dev": "concurrently -i -c \"auto\" \"npm:watch:server\" \"npm:watch:livereload\"",
-    "watch:server": "nodemon --experimental-loader hot-esm --watch nothing/ server/server.js",
+    "watch:server": "nodemon --experimental-loader hot-esm --watch server/ --ignore server/routes/ --ignore server/livereload.js server/server.js",
     "watch:livereload": "nodemon --watch server/livereload.js server/livereload.js",
     "start": "node server/server.js",
     "lint": "eslint --ext js server/ public/",
@@ -24,40 +24,46 @@
     "@fastify/compress": "^6.5.0",
     "@fastify/static": "^6.12.0",
     "compression": "^1.7.4",
-    "fastify": "^4.24.3",
+    "fastify": "^4.28.1",
+    "folder-hash": "^4.0.4",
     "htm": "^3.1.1",
     "preact": "^10.19.1",
     "preact-render-to-string": "^5.2.6"
   },
   "devDependencies": {
+    "@types/node": "^22.5.0",
     "concurrently": "^8.2.2",
-    "eslint": "^8.32.0",
-    "eslint-config-preact": "^1.3.0",
-    "eslint-config-semistandard": "^17.0.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-n": "^15.6.1",
-    "eslint-plugin-promise": "^6.1.1",
+    "eslint": "^8.57.0",
+    "eslint-config-lets-go": "^0.2.1",
+    "eslint-config-preact": "^1.4.0",
+    "eslint-plugin-prettier": "^5.2.1",
     "hot-esm": "^1.6.0",
-    "livereload": "^0.9.3"
+    "livereload": "^0.9.3",
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
   },
   "eslintConfig": {
     "ignorePatterns": "dist/",
     "env": {
       "browser": true,
       "node": true,
-      "es2021": true
+      "es2023": true
     },
     "extends": [
-      "semistandard",
+      "lets-go",
       "preact"
     ],
+    "plugins": [
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": "error"
+    },
     "overrides": [],
     "parserOptions": {
-      "ecmaVersion": 2021,
+      "ecmaVersion": 2023,
       "sourceType": "module"
-    },
-    "rules": {
-      "semi": "error"
     },
     "settings": {
       "jest": {
