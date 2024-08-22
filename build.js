@@ -1,37 +1,35 @@
-import { build } from 'esbuild';
-import { globby as glob } from 'globby';
-import { deleteAsync as rimraf } from 'del';
+import { build } from 'esbuild'
+import { globby as glob } from 'globby'
+import { deleteAsync as rimraf } from 'del'
 import {
   publicDirectoryRelative,
   ssrDirectory,
   ssrDirectoryRelative,
   publicURLPath,
-  publicDirectory
-} from './server/paths.js';
-import { promises as fs } from 'node:fs';
-import { parseArgs } from 'node:util';
+  publicDirectory,
+} from './server/paths.js'
+import { promises as fs } from 'node:fs'
+import { parseArgs } from 'node:util'
 
 const {
-  values: {
-    dev: isDevMode
-  }
+  values: { dev: isDevMode },
 } = parseArgs({
   options: {
     dev: {
       type: 'boolean',
-      default: false
-    }
-  }
-});
+      default: false,
+    },
+  },
+})
 
-const clientOutBase = 'client/';
+const clientOutBase = 'client/'
 
 const [ssrEntryPoints, clientEntryPoints] = await Promise.all([
   glob(`${clientOutBase}/pages/**/*.page.jsx`),
   glob(`${clientOutBase}/pages/**/*.islands.jsx`),
   // clean current dist/
-  rimraf('dist/')
-]);
+  rimraf('dist/'),
+])
 
 const commonConfig = {
   publicPath: publicURLPath,
@@ -46,12 +44,12 @@ const commonConfig = {
     '.png': 'file',
     '.jpg': 'file',
     '.jpeg': 'file',
-    '.webp': 'file'
+    '.webp': 'file',
   },
   resolveExtensions: ['.jsx', '.ts', '.tsx'],
   jsxImportSource: 'preact',
-  jsx: 'automatic'
-};
+  jsx: 'automatic',
+}
 
 // Why 3 builds?
 // 1. Islands JS - This is all JS the client needs. 'Full page' JS can be deleted.
@@ -69,7 +67,7 @@ const [tempBuildResult, ssrBuildResult] = await Promise.all([
     minify: true,
     sourcemap: true,
     external: ['preact'],
-    ...commonConfig
+    ...commonConfig,
   }),
   // SSR build
   build({
@@ -77,18 +75,18 @@ const [tempBuildResult, ssrBuildResult] = await Promise.all([
     outdir: ssrDirectoryRelative,
     splitting: false,
     minify: false,
-    sourcemap: 'inline',
+    sourcemap: 'external',
     external: ['preact', 'preact-render-to-string'],
     ...commonConfig,
-  })
-]);
+  }),
+])
 
 await Promise.all([
   fs.writeFile(`${publicDirectory}/metafile.json`, JSON.stringify(tempBuildResult.metafile, 0, 2)),
   fs.writeFile(`${ssrDirectory}/metafile.json`, JSON.stringify(ssrBuildResult.metafile, 0, 2)),
   rimraf(`${publicDirectoryRelative}**/*.page.js(.map)?`),
-  rimraf(`${publicDirectoryRelative}**/chunk-*.js(.map)?`)
-]);
+  rimraf(`${publicDirectoryRelative}**/chunk-*.js(.map)?`),
+])
 
 // Island JS build
 const islandBuildResult = await build({
@@ -98,13 +96,16 @@ const islandBuildResult = await build({
   minify: true,
   sourcemap: true,
   metafile: true,
-  ...commonConfig
-});
+  ...commonConfig,
+})
 
 await Promise.all([
   // there maybe no islands for the page
   islandBuildResult?.metafile
-    ? fs.writeFile(`${publicDirectory}/metafile-islands.json`, JSON.stringify(islandBuildResult.metafile, 0, 2))
+    ? fs.writeFile(
+        `${publicDirectory}/metafile-islands.json`,
+        JSON.stringify(islandBuildResult.metafile, 0, 2),
+      )
     : null,
-  rimraf(`${publicDirectoryRelative}**/*.islands-*.css(.map)?`)
-]);
+  rimraf(`${publicDirectoryRelative}**/*.islands-*.css(.map)?`),
+])

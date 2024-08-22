@@ -1,7 +1,7 @@
-import logo from './preact-logo.svg';
-import { PageContextProvider } from '../usePageContext';
-import { Link } from './Link';
-import './HomeLayout.css';
+import logo from './preact-logo.svg'
+import { PageContextProvider } from '../usePageContext'
+import { Link } from './Link'
+import './HomeLayout.css'
 
 const HomeLayout = function ({ children, pageContext }) {
   return (
@@ -19,8 +19,8 @@ const HomeLayout = function ({ children, pageContext }) {
         <Content>{children}</Content>
       </Layout>
     </PageContextProvider>
-  );
-};
+  )
+}
 
 const Layout = function ({ children }) {
   return (
@@ -28,13 +28,13 @@ const Layout = function ({ children }) {
       style={{
         display: 'flex',
         maxWidth: 900,
-        margin: 'auto'
+        margin: 'auto',
       }}
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
 const Sidebar = function ({ children }) {
   return (
@@ -45,13 +45,13 @@ const Sidebar = function ({ children }) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        lineHeight: '1.8em'
+        lineHeight: '1.8em',
       }}
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
 const Content = function ({ children }) {
   return (
@@ -61,27 +61,27 @@ const Content = function ({ children }) {
         padding: 20,
         paddingBottom: 50,
         borderLeft: '2px solid #eee',
-        minHeight: '100vh'
+        minHeight: '100vh',
       }}
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
 function Logo() {
   return (
     <div
       style={{
         marginTop: 20,
-        marginBottom: 10
+        marginBottom: 10,
       }}
     >
       <a href="/">
         <img src={logo} height={64} width={64} alt="logo" />
       </a>
     </div>
-  );
+  )
 }
 
-export { HomeLayout };
+export { HomeLayout }

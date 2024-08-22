@@ -1,5 +1,5 @@
-import { hydrate } from 'preact';
-import { Counter } from './Counter';
+import { hydrate } from 'preact'
+import { Counter } from './Counter'
 
 function Island1({ pageContext }) {
   return (
@@ -9,13 +9,13 @@ function Island1({ pageContext }) {
         Interactive. <Counter initialState={pageContext.counter} />
       </li>
     </ul>
-  );
+  )
 }
 
 // Make part of the HTML interactive
 if (typeof window !== 'undefined') {
-  const el = document.getElementById('island1');
-  hydrate(<Island1 pageContext={window.pageContext} />, el);
+  const el = document.getElementById('island1')
+  hydrate(<Island1 pageContext={window.pageContext} />, el)
 }
 
-export { Island1 };
+export { Island1 }

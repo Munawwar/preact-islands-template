@@ -1,5 +1,5 @@
-import { Island1 } from './home.islands';
-import { HomeLayout } from '../../layouts/HomeLayout';
+import { Island1 } from './home.islands'
+import { HomeLayout } from '../../layouts/HomeLayout'
 
 function Page({ pageContext }) {
   return (
@@ -10,14 +10,14 @@ function Page({ pageContext }) {
         <Island1 pageContext={pageContext} />
       </div>
     </HomeLayout>
-  );
+  )
 }
 
 // Server render helper
 // Not importing 'preact-render-to-string'.renderToString directly,
 // because it will end up unnecessarily in the client side bundle
 function pageToHtml(renderToString, pageContext) {
-  return renderToString(<Page pageContext={pageContext} />);
+  return renderToString(<Page pageContext={pageContext} />)
 }
 
-export { pageToHtml };
+export { pageToHtml }
