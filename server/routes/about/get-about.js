@@ -14,7 +14,8 @@ export default async (req, reply) => {
     liveReloadScript,
   } = await getPage('about', req.hostname)
 
-  const pageContext = { urlPathname: req.path }
+  const { pathname } = new URL(req.url, 'http://localhost:80')
+  const pageContext = { urlPathname: pathname }
   const pageHtml = pageToHtml(renderToString, pageContext)
   const html = /* html */ `
     <!DOCTYPE html>

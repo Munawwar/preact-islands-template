@@ -11,9 +11,9 @@ a {
   text-decoration: none;
 }
 
-.navitem {
+.HomeLayout-navitem {
   padding: 3px 10px;
 }
-.navitem.is-active {
+.HomeLayout-navitem.is-active {
   background-color: #eee;
 }

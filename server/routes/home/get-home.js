@@ -15,7 +15,8 @@ export default async (req, reply) => {
     importMaps,
   } = await getPage('home', req.hostname)
 
-  const pageContext = { counter: 10, urlPathname: req.path }
+  const { pathname } = new URL(req.url, 'http://localhost:80')
+  const pageContext = { counter: 10, urlPathname: pathname }
   const pageHtml = pageToHtml(renderToString, pageContext)
   const html = /* html */ `
     <!DOCTYPE html>

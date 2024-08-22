@@ -3,7 +3,7 @@ import { usePageContext } from '../usePageContext.js'
 
 function Link(props) {
   const pageContext = usePageContext()
-  const className = [props.className, pageContext.urlPathname === props.href && 'is-active']
+  const className = [props.class, pageContext.urlPathname === props.href && 'is-active']
     .filter(Boolean)
     .join(' ')
   return html`<a ...${props} class=${className} />`

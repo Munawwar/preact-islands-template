@@ -42,7 +42,7 @@ await Promise.all(
       async (req, reply) => {
         if (isDevelopment) {
           // eslint-disable-next-line no-console
-          console.log('Request:', req.method, req.originalUrl)
+          console.log('Request:', req.method, req.url)
         }
         try {
           const routeHandler = (await fetchHandler()).default
