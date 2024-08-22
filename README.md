@@ -47,7 +47,7 @@ Islands javascript will be loaded on the client side. Other than islands javascr
 You will have to do at least a couple of things to production-ize this template:
 
 1. You may not want to have a single preact context for the entire website. Each page having a separate context might be better.
-2. Optionally upload files from `/public` directory to a file storage origin (like AWS S3) and use a CDN to intercept everything under URL path `/public/*` (on the same domain as the express server) to point to the file storage origin. Remove express.js compression and enable dynamic compression on the CDN.
+2. Optionally upload files from `/public` directory to a file storage origin (like AWS S3) at path `/public/<hash>` (the hash is the hash of the `/public` directory, which you can compute using `computePublicDirHash()` function in `server/paths.js`) and use a CDN to intercept everything under URL path `/public/*` (on the same domain as the fastify server) to point to the file storage origin. Also remove fastify compression and enable dynamic compression on the CDN.
 
 ## "No build" pros and cons
 
@@ -57,9 +57,10 @@ Pros
 
 Cons
 
-- Browser needs to support [import maps](https://caniuse.com/import-maps).
-- Long lived caching cannot be done (with absolute zero build step). Browsers will revalidate ETags and your server will send HTTP status 304 Not Modified. This means more hits to the server / CDN.
-- More chances of waterfall requests when importing JS. Especially if you have lots of nested imports. HTTP/2 can only mitigate the effects of it a bit. But again this is an "islands" template. I expect less JS. If your "island" is as big as Australia then isn't that a continent?
+- Every change to `/public` directory will create a new hash and so more cache misses will happen on every release. It's not too much of a problem though.
+- Browser needs to support [import maps](https://caniuse.com/import-maps). Not a problem if you don't support older browsers.
+- More chances of waterfall requests when importing JS. Especially if you have lots of nested imports. HTTP/2 can only mitigate the effects of this a bit. But again this is an "islands" template. I expect less JS. If your "island" is as big as Australia then isn't that a continent?
+- Component props within `htm` tagged template literals cannot be type checked.
 
 ## Credits
 
