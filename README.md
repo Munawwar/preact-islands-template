@@ -57,7 +57,7 @@ Pros
 
 Cons
 
-- Every change to `/public` directory will create a new hash and so more cache misses will happen on every release. It's not too much of a problem though.
+- Every change to `/public` directory will create a new hash and so more cache misses will happen on every release. It's not too much of a problem though for an "islands" website (meaning less JS/CSS etc).
 - Browser needs to support [import maps](https://caniuse.com/import-maps). Not a problem if you don't support older browsers.
 - More chances of waterfall requests when importing JS. Especially if you have lots of nested imports. HTTP/2 can only mitigate the effects of this a bit. But again this is an "islands" template. I expect less JS. If your "island" is as big as Australia then isn't that a continent?
 - Component props within `htm` tagged template literals cannot be type checked.
