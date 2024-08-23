@@ -9,6 +9,7 @@
     "watch:server": "nodemon --experimental-loader hot-esm --watch server/ --ignore server/routes/ --ignore server/livereload.js server/server.js",
     "watch:livereload": "nodemon --watch server/livereload.js server/livereload.js",
     "start": "node server/server.js",
+    "hash": "node hash.js",
     "lint": "eslint --ext js server/ public/",
     "lint:fix": "eslint --fix --ext js server/ public/"
   },
@@ -58,7 +59,8 @@
       "prettier"
     ],
     "rules": {
-      "prettier/prettier": "error"
+      "prettier/prettier": "error",
+      "import-x/extensions": ["error", "always", { "ignorePackages": true }]
     },
     "overrides": [],
     "parserOptions": {

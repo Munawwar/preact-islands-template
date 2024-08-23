@@ -1,6 +1,9 @@
+node_modules/
+certs/
+hash.txt
+
+# others
 .DS_Store
 Thumbs.db
 __ignore__
-node_modules/
-certs/
 .vscode/

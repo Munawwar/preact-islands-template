@@ -47,7 +47,7 @@ Islands javascript will be loaded on the client side. Other than islands javascr
 You will have to do at least a couple of things to production-ize this template:
 
 1. You may not want to have a single preact context for the entire website. Each page having a separate context might be better.
-2. Optionally upload files from `/public` directory to a file storage origin (like AWS S3) at path `/public/<hash>` (the hash is the hash of the `/public` directory, which you can compute using `computePublicDirHash()` function in `server/paths.js`) and use a CDN to intercept everything under URL path `/public/*` (on the same domain as the fastify server) to point to the file storage origin. Also remove fastify compression and enable dynamic compression on the CDN.
+2. Optionally upload files from `/public` directory to a file storage origin (like AWS S3 bucket) at path `/public/<hash>` (the hash can be computed using `npm run hash` command and it outputs the hash to stdout and `server/hash.txt` file) and configure CDN to intercept everything under URL path `/public/*` (on the same domain as the fastify server) to point to the file storage origin. Also remove fastify compression and enable dynamic compression on the CDN.
 
 ## "No build" pros and cons
 
