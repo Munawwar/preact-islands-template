@@ -1,3 +1,4 @@
+import { stringify } from 'html-safe-json'
 import { renderToString } from 'preact-render-to-string'
 import getPage from '../../getPage.js'
 
@@ -23,7 +24,7 @@ export default async (req, reply) => {
       <head>
         <link rel="stylesheet" href="${css}">
         ${preloadJs.map((js) => /* html */ `<link rel="modulepreload" href="${js}">`).join('\n')}
-        <script>window.pageContext=${JSON.stringify(pageContext)};</script>
+        <script>window.pageContext=${stringify(pageContext)};</script>
         ${js ? /* html */ `<script type="module" src="${js}"></script>` : ''}
         ${liveReloadScript ? /* html */ `<script src="${liveReloadScript}"></script>` : ''}
       </head>
