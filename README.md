@@ -5,7 +5,7 @@ Example repo to start a [island architecture](https://jasonformat.com/islands-ar
 - <span aria-hidden>🐇</span> No build
 - <span aria-hidden>🤵‍♂️</span> Fastify server (HTTP2)
 - <span aria-hidden>🔄</span> Live reload on dev
-- <span aria-hidden>🌐</span> Static files deployable to a CDN
+- <span aria-hidden>🌐</span> Static files deployable to S3 behind a CDN
 
 NOTE: This template only works with latest node.js 18 (tested on v18.18+, didn't work on v18.17), node.js 20 (v20.6+) due to its reliance on experimental loader for busting dynamic `import()` cache.
 
