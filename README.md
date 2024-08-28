@@ -63,6 +63,8 @@ Cons
 - More chances of waterfall requests when importing JS. Especially if you have lots of nested imports. HTTP/2 can only mitigate the effects of this a bit. But again this is an "islands" template. I expect less JS. If your "island" is as big as Australia then isn't that a continent?
 - Component props within `htm` tagged template literals cannot be type checked (it is probably possible as [typescript-lit-html-plugin](https://github.com/microsoft/typescript-lit-html-plugin/tree/main) exists, but as of now no one seem to have tried implementing it).
 
+If you want a build step (esbuild) check branch [esbuild](https://github.com/Munawwar/preact-islands-template/tree/build-free).
+
 ## Credits
 
 Thanks to [vite-plugin-ssr](https://vite-plugin-ssr.com/) for some inspiration and example snippets, but I didn't use Vite here.
