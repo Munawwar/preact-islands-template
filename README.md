@@ -60,7 +60,7 @@ Cons
 
 - Every change to `/public` directory will create a new hash and so more cache misses will happen on every release. It's not too much of a problem especially with CDN maxage / s-maxage headers (CDNs will cache the files for a PoP - point of presence - and serve files to all users in the area without making a hit to origin server. You can reduce even more load with Cloudflare tiered caching or AWS origin shield).
 - Browser needs to support [import maps](https://caniuse.com/import-maps). Not a problem if you don't support older browsers.
-- More chances of waterfall requests when importing JS. Especially if you have lots of nested imports. HTTP/2 can only mitigate the effects of this a bit. But again this is an "islands" template. I expect less JS. If your "island" is as big as Australia then isn't that a continent?
+- More chances of waterfall requests when importing JS. Especially if you have lots of nested imports. HTTP/2 can only mitigate the effects of this a bit. But again this is an "islands" template. I don't expect "large islands" / lots of JS.
 - Component props within `htm` tagged template literals cannot be type checked (it is probably possible as [typescript-lit-html-plugin](https://github.com/microsoft/typescript-lit-html-plugin/tree/main) exists, but as of now no one seem to have tried implementing it).
 
 If you want a build step (esbuild) check branch [esbuild](https://github.com/Munawwar/preact-islands-template/tree/build-free).
