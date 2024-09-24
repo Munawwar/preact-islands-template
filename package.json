@@ -6,7 +6,7 @@
   "module": "server/server.js",
   "scripts": {
     "dev": "concurrently -i -c \"auto\" \"npm:watch:server\" \"npm:watch:livereload\"",
-    "watch:server": "nodemon --experimental-loader hot-esm --watch server/ --ignore server/routes/ --ignore server/livereload.js server/server.js",
+    "watch:server": "IMPORT_MAP_LOADER_LOG=debug nodemon --experimental-loader ./importmap.js --experimental-loader hot-esm --watch server/ --ignore server/routes/ --ignore server/livereload.js server/server.js",
     "watch:livereload": "nodemon --watch server/livereload.js server/livereload.js",
     "start": "node server/server.js",
     "hash": "node hash.js",
@@ -27,7 +27,6 @@
     "compression": "^1.7.4",
     "fastify": "^4.28.1",
     "folder-hash": "^4.0.4",
-    "htm": "^3.1.1",
     "html-safe-json": "^2.0.3",
     "preact": "^10.19.1",
     "preact-render-to-string": "^5.2.6"

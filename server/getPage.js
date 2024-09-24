@@ -2,6 +2,8 @@ import path from 'node:path'
 import fs from 'node:fs'
 import { publicDirectory, publicURLPath } from './paths.js'
 
+const importMap = fs.readFileSync('./importmap.json', { encoding: 'utf-8' })
+
 const isProduction = process.env.NODE_ENV === 'production'
 
 async function getPage(pageName, hostname) {
@@ -16,13 +18,7 @@ async function getPage(pageName, hostname) {
 
   const importMaps = `
     <script type="importmap">
-      {
-        "imports": {
-          "preact": "https://unpkg.com/preact@10.19.1/dist/preact.module.js",
-          "preact/hooks": "https://unpkg.com/preact@10.19.1/hooks/dist/hooks.module.js",
-          "htm/preact": "https://unpkg.com/htm@3.1.1/preact/standalone.module.js"
-        }
-      }
+  ${importMap}
     </script>
   `
   const preloadJs = doesIslandsFileExists
