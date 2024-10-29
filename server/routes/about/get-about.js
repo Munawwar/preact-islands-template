@@ -25,6 +25,12 @@ export default async (req, res) => {
         ${preloadJs.map((js) => /* html */ `<link rel="modulepreload" href="${js}">`).join('\n')}
         <script>window.pageContext=${stringify(pageContext)};</script>
         ${js ? /* html */ `<script type="module" src="${js}"></script>` : ''}
+        <script
+          src="//instant.page/5.2.0"
+          type="module"
+          integrity="sha384-jnZyxPjiipYXnSU0ygqeac2q7CVYMbh84q0uHVRRxEtvFPiQYbXWUorga2aqZJ0z"
+          fetchpriority="low"
+        ></script>
         ${liveReloadScript ? /* html */ `<script src="${liveReloadScript}"></script>` : ''}
       </head>
       <body>

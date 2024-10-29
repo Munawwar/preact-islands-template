@@ -6,7 +6,7 @@ function Link(props) {
     .filter(Boolean)
     .join(' ')
   // eslint-disable-next-line jsx-a11y/anchor-has-content
-  return <a {...props} className={className} />
+  return <a {...props} className={className} data-no-instant={pageContext?.urlPathname === props.href} />
 }
 
 export { Link }
