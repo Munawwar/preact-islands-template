@@ -11,7 +11,8 @@ If you don't need server side rendering (SSR) check [preact-spa-template](https:
 - <span aria-hidden>🔄</span> Live reload
 - <span aria-hidden>✂️</span> Shared code chunks / Code splitting (read esbuild docs for caveats)
 - <span aria-hidden>🚀</span> Preload shared chunks
-- <span aria-hidden>🌐</span> Static files deployable to S3 behind a CDN
+- <span aria-hidden>🌍</span> Static files deployable to S3 behind a CDN
+- <span aria-hidden>🗲</span> Preloads pages on mouse hover / touch start (using [instant.page](https://instant.page/))
 
 ```sh
 # Note you need node.js v18.18+ or v20.6+ for server hot-reload to work
