@@ -1,7 +1,6 @@
 import { html } from 'htm/preact'
-import { PageContextProvider } from '../usePageContext.js'
+import { PageContextProvider, usePageContext } from '../usePageContext.js'
 import { Link } from './Link.js'
-import { publicURLPath } from '../../server/paths.js'
 
 const Layout = function ({ children }) {
   return html`
@@ -51,6 +50,7 @@ const Content = function ({ children }) {
 }
 
 function Logo() {
+  const pageContext = usePageContext()
   return html`
     <div
       style=${{
@@ -59,7 +59,12 @@ function Logo() {
       }}
     >
       <a href="/">
-        <img src="${publicURLPath}/layouts/preact-logo.svg" height=${64} width=${64} alt="logo" />
+        <img
+          src="${pageContext.publicURLPath}/layouts/preact-logo.svg"
+          height=${64}
+          width=${64}
+          alt="logo"
+        />
       </a>
     </div>
   `

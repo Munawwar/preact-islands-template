@@ -1,6 +1,7 @@
 import { stringify } from 'html-safe-json'
 import { renderToString } from 'preact-render-to-string'
 import getPage from '../../getPage.js'
+import { publicURLPath } from '../../paths.js'
 
 /**
  * @param {import('fastify').FastifyRequest} req
@@ -16,7 +17,7 @@ export default async (req, reply) => {
   } = await getPage('about', req.hostname)
 
   const { pathname } = new URL(req.url, 'http://localhost:80')
-  const pageContext = { urlPathname: pathname }
+  const pageContext = { urlPathname: pathname, publicURLPath }
   const pageHtml = pageToHtml(renderToString, pageContext)
   const html = /* html */ `
     <!DOCTYPE html>
